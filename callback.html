@@ -1,0 +1,33 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Autorisation TikTok — L'Histrotteur</title>
+<link rel="stylesheet" href="style.css"></head><body>
+<h1>Autorisation TikTok</h1>
+<p class="sub" id="sub">Lecture du code…</p>
+<div id="out"></div>
+<footer><a href="index.html">L'Histrotteur</a></footer>
+<script>
+const q = new URLSearchParams(location.search);
+const code = q.get('code');
+const error = q.get('error_description') || q.get('error');
+const out = document.getElementById('out');
+const sub = document.getElementById('sub');
+
+if (code) {
+  sub.textContent = "Copie ce code et colle-le dans le tableau de bord.";
+  out.innerHTML = `
+    <textarea readonly rows="4" style="width:100%;font:13px ui-monospace,monospace;
+      padding:12px;border-radius:10px;border:1px solid #c9ccd6;background:#fff;
+      color:#1a1c22">${code}</textarea>
+    <p><button id="copy" style="font:inherit;padding:9px 16px;border-radius:9px;
+      border:1px solid #c9ccd6;background:#fff;cursor:pointer">Copier</button></p>`;
+  document.getElementById('copy').onclick = async () => {
+    await navigator.clipboard.writeText(code);
+    document.getElementById('copy').textContent = 'Copié';
+  };
+} else {
+  sub.textContent = "Aucun code reçu.";
+  out.innerHTML = `<p>${error || "L'autorisation a été refusée ou interrompue."}</p>`;
+}
+</script>
+</body></html>
